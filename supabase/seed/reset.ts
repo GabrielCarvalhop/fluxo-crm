@@ -3,10 +3,12 @@
 // (clients.lead_id e leads.converted_client_id, projects.proposal_id):
 // projetos -> propostas -> (desvincula lead<->client) -> clientes -> leads.
 
-import "dotenv/config";
+import { config } from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../../src/types/database";
 import { SEED_LEAD_NAMES } from "./data";
+
+config({ path: ".env.local" });
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
