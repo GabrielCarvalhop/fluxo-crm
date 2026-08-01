@@ -1,5 +1,37 @@
-import { formatDistanceToNowStrict, format, isToday, isTomorrow, isYesterday, isPast } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  format,
+  isToday,
+  isTomorrow,
+  isYesterday,
+  isPast,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  startOfDay,
+  endOfDay,
+  eachDayOfInterval,
+} from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+export function getDayRange(date: Date) {
+  return { from: startOfDay(date), to: endOfDay(date) };
+}
+
+export function getWeekRange(date: Date) {
+  return { from: startOfWeek(date, { weekStartsOn: 1 }), to: endOfWeek(date, { weekStartsOn: 1 }) };
+}
+
+export function getMonthRange(date: Date) {
+  const from = startOfWeek(startOfMonth(date), { weekStartsOn: 1 });
+  const to = endOfWeek(endOfMonth(date), { weekStartsOn: 1 });
+  return { from, to };
+}
+
+export function daysInRange(from: Date, to: Date) {
+  return eachDayOfInterval({ start: from, end: to });
+}
 
 export function relativeTime(iso: string | null | undefined) {
   if (!iso) return "—";
