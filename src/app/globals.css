@@ -1,0 +1,195 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-elevated: var(--elevated);
+  --color-elevated-foreground: var(--elevated-foreground);
+  --color-text-subtle: var(--text-subtle);
+
+  /* Cores funcionais — mesmas em light e dark, únicas cores "de marca" fora do accent */
+  --color-hot: var(--hot);
+  --color-hot-foreground: var(--hot-foreground);
+  --color-warm: var(--warm);
+  --color-warm-foreground: var(--warm-foreground);
+  --color-cold: var(--cold);
+  --color-cold-foreground: var(--cold-foreground);
+  --color-won: var(--won);
+  --color-won-foreground: var(--won-foreground);
+  --color-lost: var(--lost);
+  --color-lost-foreground: var(--lost-foreground);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Fluxo CRM — design tokens
+   Escala: bg (canvas) < surface (cards/sidebar) < elevated (popover/drawer)
+   Única cor de marca fora dos status: --accent. Status usam cor só quando funcionais. */
+:root {
+  --background: #fafafa;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --elevated: #ffffff;
+  --elevated-foreground: #18181b;
+
+  --primary: #3d63d6;
+  --primary-foreground: #fafafa;
+  --secondary: #f0f0f2;
+  --secondary-foreground: #18181b;
+  --muted: #f0f0f2;
+  --muted-foreground: #52525b;
+  --accent: #ececef;
+  --accent-foreground: #18181b;
+  --text-subtle: #71717a;
+
+  --destructive: #dc2626;
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+  --input: #e4e4e7;
+  --ring: #3d63d6;
+  --radius: 0.5rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #18181b;
+  --sidebar-primary: #3d63d6;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #f0f0f2;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #3d63d6;
+
+  --chart-1: #4f7dff;
+  --chart-2: #10b981;
+  --chart-3: #eab308;
+  --chart-4: #f97316;
+  --chart-5: #71717a;
+
+  --hot: #f97316;
+  --hot-foreground: #f97316;
+  --warm: #eab308;
+  --warm-foreground: #eab308;
+  --cold: #3b82f6;
+  --cold-foreground: #3b82f6;
+  --won: #10b981;
+  --won-foreground: #10b981;
+  --lost: #71717a;
+  --lost-foreground: #52525b;
+}
+
+.dark {
+  --background: #0a0a0b;
+  --foreground: #fafafa;
+  --card: #121214;
+  --card-foreground: #fafafa;
+  --popover: #18181b;
+  --popover-foreground: #fafafa;
+  --elevated: #18181b;
+  --elevated-foreground: #fafafa;
+
+  --primary: #4f7dff;
+  --primary-foreground: #fafafa;
+  --secondary: #1c1c1f;
+  --secondary-foreground: #fafafa;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa;
+  --accent: #1f1f23;
+  --accent-foreground: #fafafa;
+  --text-subtle: #71717a;
+
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #4f7dff;
+
+  --sidebar: #121214;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #4f7dff;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #1f1f23;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-ring: #4f7dff;
+
+  --chart-1: #4f7dff;
+  --chart-2: #10b981;
+  --chart-3: #eab308;
+  --chart-4: #f97316;
+  --chart-5: #a1a1aa;
+
+  --hot: #f97316;
+  --hot-foreground: #f97316;
+  --warm: #eab308;
+  --warm-foreground: #eab308;
+  --cold: #3b82f6;
+  --cold-foreground: #3b82f6;
+  --won: #10b981;
+  --won-foreground: #10b981;
+  --lost: #71717a;
+  --lost-foreground: #a1a1aa;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+@layer utilities {
+  /* Numerais tabulares para valores monetários, datas e códigos */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
