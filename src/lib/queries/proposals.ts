@@ -5,7 +5,8 @@ export async function getProposalsList() {
   const { data, error } = await supabase
     .from("v_proposals")
     .select("*, lead:leads(company_name), client:clients(company_name)")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(300);
 
   if (error) throw error;
   return data ?? [];

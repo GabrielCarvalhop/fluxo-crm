@@ -3,7 +3,7 @@ import { getReportsData } from "@/lib/queries/reports";
 import { getFinanceData } from "@/lib/queries/finance";
 import { FunnelChart } from "@/components/dashboard/funnel-chart";
 import { SimpleBarList } from "@/components/reports/simple-bar-list";
-import { RevenueChart } from "@/components/reports/revenue-chart";
+import { RevenueChart } from "@/components/reports/revenue-chart-lazy";
 import { DashboardSection } from "@/components/dashboard/section";
 import { IndicatorCard } from "@/components/shared/indicator-card";
 import { formatMoney, formatPercent } from "@/lib/utils/format";

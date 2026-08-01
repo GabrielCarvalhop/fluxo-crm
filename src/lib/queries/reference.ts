@@ -23,13 +23,24 @@ export const getReferenceData = cache(async () => {
   };
 });
 
-export const getCurrentProfile = cache(async () => {
+/**
+ * getUser() faz uma chamada de rede ao Auth do Supabase. Como o layout e o
+ * menu de usuário (em Suspense) precisam do mesmo dado, o cache() do React
+ * garante uma única chamada por request.
+ */
+export const getAuthUser = cache(async () => {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  return user;
+});
+
+export const getCurrentProfile = cache(async () => {
+  const user = await getAuthUser();
   if (!user) return null;
 
+  const supabase = await createClient();
   const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   return data;
 });

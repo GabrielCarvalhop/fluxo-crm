@@ -18,11 +18,13 @@ export async function getFollowUpsBoard(): Promise<FollowUpBuckets> {
       .from("follow_ups")
       .select("*, lead:leads(id, company_name, whatsapp), client:clients(id, company_name, whatsapp)")
       .eq("status", "pending")
-      .order("due_at"),
+      .order("due_at")
+      .limit(300),
     supabase
       .from("leads")
       .select("id, company_name, whatsapp, stage:pipeline_stages(is_won, is_lost)")
-      .is("deleted_at", null),
+      .is("deleted_at", null)
+      .limit(300),
   ]);
 
   if (followUpsRes.error) throw followUpsRes.error;

@@ -7,7 +7,8 @@ export async function getAgendaEvents(from: string, to: string) {
     .select("*")
     .gte("starts_at", from)
     .lte("starts_at", to)
-    .order("starts_at");
+    .order("starts_at")
+    .limit(500);
 
   if (error) throw error;
   return data ?? [];

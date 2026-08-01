@@ -3,7 +3,7 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { formatMoney } from "@/lib/utils/format";
 
-export function RevenueChart({ data }: { data: { label: string; total: number }[] }) {
+export default function RevenueChart({ data }: { data: { label: string; total: number }[] }) {
   return (
     <div className="h-56 w-full p-4">
       <ResponsiveContainer width="100%" height="100%">

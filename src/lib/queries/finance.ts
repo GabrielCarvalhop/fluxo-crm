@@ -9,7 +9,8 @@ export async function getFinanceData() {
     supabase
       .from("v_financial_status")
       .select("*, client:clients(company_name), project:projects(name)")
-      .order("due_date", { ascending: false }),
+      .order("due_date", { ascending: false })
+      .limit(500),
     supabase.from("leads").select("estimated_value, stage:pipeline_stages(is_won, is_lost)").is("deleted_at", null),
     supabase.from("projects").select("value, status").is("deleted_at", null),
   ]);

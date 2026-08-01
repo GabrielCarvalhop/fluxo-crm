@@ -9,13 +9,12 @@ const SIDEBAR_COOKIE = "sidebar-collapsed";
 
 export function AppShell({
   defaultCollapsed,
-  userName,
-  userEmail,
+  userMenu,
   children,
 }: {
   defaultCollapsed: boolean;
-  userName: string;
-  userEmail: string;
+  /** Renderizado no servidor e enviado por streaming (Suspense) pelo layout. */
+  userMenu: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
@@ -51,7 +50,7 @@ export function AppShell({
     <div className="flex h-svh w-full overflow-hidden bg-background">
       <Sidebar collapsed={collapsed} onToggle={toggleCollapsed} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar userName={userName} userEmail={userEmail} onOpenSearch={() => setSearchOpen(true)} />
+        <Topbar userMenu={userMenu} onOpenSearch={() => setSearchOpen(true)} />
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
       <CommandPalette open={searchOpen} onOpenChange={setSearchOpen} />

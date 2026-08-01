@@ -4,15 +4,12 @@ import { Search } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
 import { NewButton } from "./new-button";
 import { NotificationsPopover } from "./notifications-popover";
-import { UserMenu } from "./user-menu";
 
 export function Topbar({
-  userName,
-  userEmail,
+  userMenu,
   onOpenSearch,
 }: {
-  userName: string;
-  userEmail: string;
+  userMenu: React.ReactNode;
   onOpenSearch: () => void;
 }) {
   return (
@@ -33,7 +30,7 @@ export function Topbar({
       <div className="ml-auto flex items-center gap-1.5">
         <NewButton />
         <NotificationsPopover />
-        <UserMenu name={userName} email={userEmail} />
+        {userMenu}
       </div>
     </header>
   );
