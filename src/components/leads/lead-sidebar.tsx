@@ -5,6 +5,8 @@ import { ProposalStatusBadge } from "@/components/shared/proposal-status-badge";
 import { FollowUpRow } from "@/components/shared/follow-up-row";
 import { LeadTags } from "./lead-tags";
 import { LeadNotes } from "./lead-notes";
+import { MeetingStatusSelect } from "@/components/shared/meeting-status-select";
+import { formatDateTime } from "@/lib/utils/dates";
 import type { LeadDetail } from "@/lib/queries/leads";
 
 export function LeadSidebar({
@@ -13,6 +15,7 @@ export function LeadSidebar({
   notes,
   tags,
   followUps,
+  meetings,
   proposals,
   allTags,
 }: {
@@ -21,6 +24,7 @@ export function LeadSidebar({
   notes: LeadDetail["notes"];
   tags: { id: string; label: string }[];
   followUps: LeadDetail["followUps"];
+  meetings: LeadDetail["meetings"];
   proposals: LeadDetail["proposals"];
   allTags: { id: string; label: string }[];
 }) {
@@ -70,6 +74,24 @@ export function LeadSidebar({
                   whatsapp: lead.whatsapp,
                 }}
               />
+            ))}
+          </div>
+        )}
+      </div>
+
+      <Separator />
+
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-medium text-text-subtle uppercase">Reuniões</span>
+        {meetings.length === 0 ? (
+          <p className="text-sm text-muted-foreground">Nenhuma ainda.</p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {meetings.map((m) => (
+              <div key={m.id} className="flex flex-col gap-1.5 rounded-md border border-border p-2">
+                <span className="text-sm text-foreground">{formatDateTime(m.starts_at)}</span>
+                <MeetingStatusSelect meetingId={m.id} status={m.status} />
+              </div>
             ))}
           </div>
         )}

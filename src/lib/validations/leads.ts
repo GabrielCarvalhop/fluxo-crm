@@ -7,6 +7,14 @@ const optionalUuid = z
 
 const emptyToUndefined = (v: unknown) => (v === "" ? undefined : v);
 
+/**
+ * Checkbox em FormData: marcado envia "on", desmarcado não envia nada. Os
+ * formulários incluem um hidden "false" antes do checkbox para que o estado
+ * desmarcado chegue explicitamente. z.coerce.boolean() não serve aqui —
+ * Boolean("false") é true.
+ */
+const checkboxField = z.preprocess((v) => v === "on" || v === "true" || v === true, z.boolean());
+
 export const createLeadSchema = z.object({
   company_name: z.string().trim().min(1, "Informe o nome da empresa"),
   contact_name: z.preprocess(emptyToUndefined, z.string().trim().optional()),
@@ -31,9 +39,9 @@ export const updateLeadSchema = z.object({
   website_url: z.preprocess(emptyToUndefined, z.string().trim().optional()),
   google_maps_url: z.preprocess(emptyToUndefined, z.string().trim().optional()),
   source_id: optionalUuid,
-  has_website: z.coerce.boolean().optional(),
+  has_website: checkboxField.optional(),
   website_quality: z.enum(["none", "very_bad", "bad", "average", "good"]).optional(),
-  pilot_created: z.coerce.boolean().optional(),
+  pilot_created: checkboxField.optional(),
   pilot_url: z.preprocess(emptyToUndefined, z.string().trim().optional()),
   estimated_value: z.preprocess(
     (v) => (v === "" || v === undefined ? undefined : Number(v)),
@@ -43,10 +51,10 @@ export const updateLeadSchema = z.object({
 });
 export type UpdateLeadInput = z.infer<typeof updateLeadSchema>;
 
-export const moveLeadStageSchema = z.object({
-  id: z.string().uuid(),
+export const reorderLeadsSchema = z.object({
   stage_id: z.string().uuid(),
-  position: z.number(),
+  /** Ordem final completa da coluna de destino — o banco renumera a partir disso. */
+  lead_ids: z.array(z.string().uuid()).min(1),
 });
 
 export const logContactSchema = z.object({

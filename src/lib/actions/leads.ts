@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   createLeadSchema,
   updateLeadSchema,
-  moveLeadStageSchema,
+  reorderLeadsSchema,
   logContactSchema,
   addNoteSchema,
   markLostSchema,
@@ -79,18 +79,23 @@ export async function updateLead(_prev: ActionState, formData: FormData): Promis
   return { success: true };
 }
 
-export async function moveLeadStage(input: { id: string; stage_id: string; position: number }) {
-  const parsed = moveLeadStageSchema.safeParse(input);
+/**
+ * Recebe a ordem final completa da coluna de destino e deixa o Postgres
+ * renumerar tudo. Mais robusto que calcular uma posição fracionária no
+ * cliente, que empatava quando os vizinhos tinham a mesma posição.
+ */
+export async function reorderLeads(input: { stage_id: string; lead_ids: string[] }) {
+  const parsed = reorderLeadsSchema.safeParse(input);
   if (!parsed.success) throw new Error("Dados inválidos");
 
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("leads")
-    .update({ stage_id: parsed.data.stage_id, position: parsed.data.position })
-    .eq("id", parsed.data.id);
+  const { error } = await supabase.rpc("reorder_leads", {
+    p_lead_ids: parsed.data.lead_ids,
+    p_stage_id: parsed.data.stage_id,
+  });
 
   if (error) throw new Error(error.message);
-  revalidateLeadPaths(parsed.data.id);
+  revalidateLeadPaths();
 }
 
 export async function logContact(_prev: ActionState, formData: FormData): Promise<ActionState> {

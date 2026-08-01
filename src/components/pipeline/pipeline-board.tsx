@@ -14,7 +14,7 @@ import {
 import { toast } from "sonner";
 import { PipelineColumn } from "./pipeline-column";
 import { LeadCard, type PipelineLead } from "./lead-card";
-import { moveLeadStage } from "@/lib/actions/leads";
+import { reorderLeads } from "@/lib/actions/leads";
 
 type Stage = { id: string; key: string; label: string; color: string; position: number };
 
@@ -46,31 +46,38 @@ export function PipelineBoard({ stages, leads: initialLeads }: { stages: Stage[]
     const { active, over } = e;
     if (!over) return;
 
-    const activeLead = leads.find((l) => l.id === active.id);
-    if (!activeLead) return;
+    const dragged = leads.find((l) => l.id === active.id);
+    if (!dragged) return;
 
     // over.id é ou o id de outro card (solta perto dele) ou o id da coluna (solta vazia)
     const overIsColumn = stages.some((s) => s.id === over.id);
     const targetStageId = overIsColumn ? String(over.id) : leads.find((l) => l.id === over.id)?.stage_id;
     if (!targetStageId) return;
 
-    const targetColumn = (columns.get(targetStageId) ?? []).filter((l) => l.id !== activeLead.id);
-    const overIndex = overIsColumn ? targetColumn.length : targetColumn.findIndex((l) => l.id === over.id);
-    const insertIndex = overIndex === -1 ? targetColumn.length : overIndex;
+    const withoutDragged = (columns.get(targetStageId) ?? []).filter((l) => l.id !== dragged.id);
+    const overIndex = overIsColumn ? withoutDragged.length : withoutDragged.findIndex((l) => l.id === over.id);
+    const insertIndex = overIndex === -1 ? withoutDragged.length : overIndex;
 
-    const prevPos = insertIndex > 0 ? Number(targetColumn[insertIndex - 1].position) : null;
-    const nextPos = insertIndex < targetColumn.length ? Number(targetColumn[insertIndex].position) : null;
-    const newPosition = prevPos === null && nextPos === null ? 0 : prevPos === null ? nextPos! - 1 : nextPos === null ? prevPos + 1 : (prevPos + nextPos) / 2;
+    const orderedIds = [
+      ...withoutDragged.slice(0, insertIndex).map((l) => l.id),
+      dragged.id,
+      ...withoutDragged.slice(insertIndex).map((l) => l.id),
+    ];
 
-    if (targetStageId === activeLead.stage_id && newPosition === Number(activeLead.position)) return;
+    // Nada mudou: mesma coluna, mesma posição.
+    const currentOrder = (columns.get(targetStageId) ?? []).map((l) => l.id);
+    if (targetStageId === dragged.stage_id && currentOrder.join() === orderedIds.join()) return;
 
     const previousLeads = leads;
+    const positionById = new Map(orderedIds.map((id, i) => [id, i + 1]));
     setLeads((prev) =>
-      prev.map((l) => (l.id === activeLead.id ? { ...l, stage_id: targetStageId, position: newPosition } : l))
+      prev.map((l) =>
+        positionById.has(l.id) ? { ...l, stage_id: targetStageId, position: positionById.get(l.id)! } : l
+      )
     );
 
     try {
-      await moveLeadStage({ id: activeLead.id, stage_id: targetStageId, position: newPosition });
+      await reorderLeads({ stage_id: targetStageId, lead_ids: orderedIds });
     } catch {
       setLeads(previousLeads);
       toast.error("Não foi possível mover o lead. Tente novamente.");

@@ -1906,6 +1906,10 @@ export type Database = {
         Returns: undefined
       }
       next_proposal_code: { Args: never; Returns: string }
+      reorder_leads: {
+        Args: { p_lead_ids: string[]; p_stage_id: string }
+        Returns: undefined
+      }
       sync_lead_next_follow_up: {
         Args: { p_lead_id: string }
         Returns: undefined

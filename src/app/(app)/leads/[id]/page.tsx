@@ -16,7 +16,12 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="flex h-full flex-col">
-      <LeadHeader lead={detail.lead} lossReasons={ref.lossReasons} />
+      <LeadHeader
+        lead={detail.lead}
+        lossReasons={ref.lossReasons}
+        segments={ref.segments}
+        sources={ref.sources}
+      />
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
         <div className="flex-1 overflow-y-auto p-6">
           <h2 className="mb-4 text-sm font-medium text-foreground">Histórico</h2>
@@ -29,6 +34,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             notes={detail.notes}
             tags={detail.tags as { id: string; label: string }[]}
             followUps={detail.followUps}
+            meetings={detail.meetings}
             proposals={detail.proposals}
             allTags={ref.tags}
           />
