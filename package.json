@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx supabase/seed/seed.ts",
+    "seed:reset": "tsx supabase/seed/reset.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
