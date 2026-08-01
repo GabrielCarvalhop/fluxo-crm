@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const initialState: ActionState = {};
 
@@ -16,11 +17,14 @@ export function QuickProposalDialog({
   clientId,
   projectId,
   defaultTitle,
+  clients,
 }: {
   leadId?: string;
   clientId?: string;
   projectId?: string;
   defaultTitle?: string;
+  /** Quando não há leadId/clientId fixo (ex: página de Propostas), oferece um seletor de cliente. */
+  clients?: { id: string; company_name: string }[];
 }) {
   const [open, setOpen] = useState(false);
   const [state, formAction, isPending] = useActionState(createProposal, initialState);
@@ -43,8 +47,22 @@ export function QuickProposalDialog({
         </DialogHeader>
         <form action={formAction} className="flex flex-col gap-3">
           <input type="hidden" name="lead_id" value={leadId ?? ""} />
-          <input type="hidden" name="client_id" value={clientId ?? ""} />
           <input type="hidden" name="project_id" value={projectId ?? ""} />
+
+          {!clientId && clients && (
+            <div className="flex flex-col gap-1.5">
+              <Label>Cliente</Label>
+              <Select name="client_id">
+                <SelectTrigger><SelectValue placeholder="Selecionar cliente" /></SelectTrigger>
+                <SelectContent>
+                  {clients.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          {clientId && <input type="hidden" name="client_id" value={clientId} />}
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="title">Título</Label>
